@@ -58,17 +58,11 @@ public class SellerDaoJDBC implements SellerDao {
 			if(rs.next()) {
 				//CASO TENHA PROXIMA LINHA RETORNA  A TABELA COM TODOS ESSES DADOS
 				//VAI PRECISAR NAVEGAR NOS DADOS PRA INSTANCIAR OS OBJ
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
 				
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setDepartment(dep);
+				//instantiateDepartament é colocaa toda a função de set
+				Department dep = instantiateDepartament(rs);
+				
+				Seller obj =instantienteSeller(rs,dep);
 				return obj;
 				
 				
@@ -89,6 +83,26 @@ public class SellerDaoJDBC implements SellerDao {
 		
 		
 	}
+
+	private Seller instantienteSeller(ResultSet rs, Department dep) throws SQLException {
+		 	Seller obj =new Seller();
+			obj.setId(rs.getInt("Id"));
+			obj.setName(rs.getString("Name"));
+			obj.setEmail(rs.getString("Email"));
+			obj.setBirthDate(rs.getDate("BirthDate"));
+			obj.setBaseSalary(rs.getDouble("BaseSalary"));
+			obj.setDepartment(dep);
+			return obj;
+	}
+
+
+	private Department instantiateDepartament(ResultSet rs) throws SQLException {
+		Department dep=new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
+	}
+
 
 	@Override
 	public List<Seller> findAll() {
