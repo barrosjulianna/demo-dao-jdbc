@@ -1,12 +1,27 @@
 package model.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
+import db.DB;
+import db.DbException;
 import model.dao.SellerDao;
+import model_entities.Department;
 import model_entities.Seller;
 
 public class SellerDaoJDBC implements SellerDao {
 
+	//CONEXAO COM O BANCO
+	private Connection conn;
+	
+	public SellerDaoJDBC(Connection conn) {
+		this.conn=conn;
+	}
+	
+	
 	@Override
 	public void insert(Seller obj) {
 		// TODO Auto-generated method stub
@@ -27,8 +42,52 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public Seller findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		PreparedStatement st=null;
+		ResultSet rs=null;
+		try {
+			st=conn.prepareStatement(
+					"SELECT seller.*,department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "WHERE seller.Id = ?");
+			
+			st.setInt(1,id);
+			rs=st.executeQuery();
+			
+			if(rs.next()) {
+				//CASO TENHA PROXIMA LINHA RETORNA  A TABELA COM TODOS ESSES DADOS
+				//VAI PRECISAR NAVEGAR NOS DADOS PRA INSTANCIAR OS OBJ
+				Department dep = new Department();
+				dep.setId(rs.getInt("DepartmentId"));
+				dep.setName(rs.getString("DepName"));
+				
+				Seller obj = new Seller();
+				obj.setId(rs.getInt("Id"));
+				obj.setName(rs.getString("Name"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setBirthDate(rs.getDate("BirthDate"));
+				obj.setBaseSalary(rs.getDouble("BaseSalary"));
+				obj.setDepartment(dep);
+				return obj;
+				
+				
+				
+			}
+			//CASO NÃO TENHA NENHUM VENDEDOR COM ESSE ID RETORNA NULO
+			return null;
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+		
+		
+		
+		
+		
+		
 	}
 
 	@Override
