@@ -37,12 +37,16 @@ public class Program {
 		
 		}
 				
-		System.out.println("\n===TESTE NUMERO 3 INSERÇÃO sellerInsert ===");
+		System.out.println("\n===TESTE NUMERO 4 INSERÇÃO sellerInsert ===");
 		Seller newSeller = new Seller(null, "Greg", "Greg@gmail.com", new Date(), 4000.0, department);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted! new ID= " +newSeller.getId());
 		
-
+		System.out.println("\n===TESTE NUMERO 4 UPDATE sellerUpdate ===");
+		seller=sellerDao.findById(1);
+		//A PARTIR DO 1 VAI SETAR UM NOVO NOME
+		seller.setName("Martha");
+		sellerDao.update(seller);
 	}
 
 }
