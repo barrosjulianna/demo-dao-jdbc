@@ -42,11 +42,19 @@ public class Program {
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted! new ID= " +newSeller.getId());
 		
-		System.out.println("\n===TESTE NUMERO 4 UPDATE sellerUpdate ===");
+		System.out.println("\n===TESTE NUMERO 5 UPDATE sellerUpdate ===");
 		seller=sellerDao.findById(1);
 		//A PARTIR DO 1 VAI SETAR UM NOVO NOME
 		seller.setName("Martha");
 		sellerDao.update(seller);
+		
+		System.out.println("\n===TESTE NUMERO 6 DELETE sellerUpdate ===");
+		System.out.println("DIGITE O CODIGO APRA EXCLUSÃO: ");
+		int id1=sc.nextInt();
+		sellerDao.deleteById(id1);
+		System.out.println("Delete completed");
+		
+		sc.close();
 	}
 
 }
