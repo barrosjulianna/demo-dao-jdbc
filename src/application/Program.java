@@ -1,5 +1,6 @@
 package application;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,6 +37,10 @@ public class Program {
 		
 		}
 				
+		System.out.println("\n===TESTE NUMERO 3 INSERÇÃO sellerInsert ===");
+		Seller newSeller = new Seller(null, "Greg", "Greg@gmail.com", new Date(), 4000.0, department);
+		sellerDao.insert(newSeller);
+		System.out.println("Inserted! new ID= " +newSeller.getId());
 		
 
 	}
